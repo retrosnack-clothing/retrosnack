@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/aidantrabs/kenko"
@@ -107,10 +109,35 @@ func main() {
 	})
 
 	addr := ":" + cfg.Port
-	logger.Info("server starting", "addr", addr, "env", cfg.Env)
+	srv := &http.Server{
+		Addr:         addr,
+		Handler:      r,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
 
-	if err := http.ListenAndServe(addr, r); err != nil {
-		logger.Error("server stopped", "error", err)
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		logger.Info("server starting", "addr", addr, "env", cfg.Env)
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			logger.Error("server stopped", "error", err)
+			os.Exit(1)
+		}
+	}()
+
+	<-done
+	logger.Info("server shutting down")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		logger.Error("forced shutdown", "error", err)
 		os.Exit(1)
 	}
+
+	logger.Info("server stopped gracefully")
 }
