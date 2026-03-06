@@ -2,6 +2,7 @@ package httputil
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 )
 
@@ -16,8 +17,13 @@ func JSON(w http.ResponseWriter, status int, v any) {
 	_ = json.NewEncoder(w).Encode(v)
 }
 
-// Error writes a JSON error response.
+// Error writes a JSON error response, hiding internal details for 5xx errors.
 func Error(w http.ResponseWriter, status int, err error) {
+	if status >= 500 {
+		slog.Error("internal error", "status", status, "error", err)
+		JSON(w, status, errorBody{Error: "internal server error"})
+		return
+	}
 	JSON(w, status, errorBody{Error: err.Error()})
 }
 
