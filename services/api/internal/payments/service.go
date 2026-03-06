@@ -2,6 +2,7 @@ package payments
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -86,8 +87,8 @@ func (s *service) HandleWebhook(ctx context.Context, payload []byte, signature s
 	switch event.Type {
 	case "checkout.session.completed":
 		var sess stripe.CheckoutSession
-		if err := event.DataObject(&sess); err != nil {
-			return err
+		if err := json.Unmarshal(event.Data.Raw, &sess); err != nil {
+			return fmt.Errorf("failed to parse checkout session: %w", err)
 		}
 
 		orderIDStr, ok := sess.Metadata["order_id"]
