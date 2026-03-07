@@ -59,18 +59,20 @@ uses `aws-sdk-go-v2` with a custom R2 endpoint.
 
 ---
 
-## ADR-005: Stripe Checkout for Payments
+## ADR-005: Square for Payments
 
-**Status:** Accepted
-**Date:** 2026-03-05
+**Status:** Accepted (supersedes original Stripe decision)
+**Date:** 2026-03-06
 
-**Context:** Need a secure, hosted payment flow. Custom card forms require PCI compliance overhead.
+**Context:** retrosnack uses Square for in-person sales. Using the same provider for online payments
+unifies transaction management, reporting, and inventory across both channels. Custom card forms
+require PCI compliance overhead.
 
-**Decision:** Stripe Checkout (redirect-based). Webhook at `POST /api/webhooks/stripe` fulfills orders.
-Stripe signing secret validates every webhook event.
+**Decision:** Square payment links (redirect-based). Webhook at `POST /api/webhooks/square` fulfills
+orders. Square HMAC signature validates every webhook event. Uses `square-go-sdk` Go client.
 
 **Consequences:** No PCI scope on our servers. Order fulfillment is event-driven, not synchronous.
-$100 Stripe credit available for initial transaction fees.
+Single payment provider for in-person and online sales simplifies bookkeeping and reconciliation.
 
 ---
 

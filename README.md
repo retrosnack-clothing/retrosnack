@@ -37,7 +37,7 @@ graph TD
     end
 
     subgraph "External"
-        Stripe["Stripe\nCheckout"]
+        Square["Square\nPayments"]
         IGEmbed["Instagram\noEmbed API"]
     end
 
@@ -50,7 +50,7 @@ graph TD
     Pages --> CloudRun
     CloudRun --> Auth & Catalog & Inventory & Orders & Payments & Instagram & Media
     Auth & Catalog & Inventory & Orders --> Neon
-    Payments --> Stripe
+    Payments --> Square
     Instagram --> IGEmbed
     Media --> R2
     GHA --> Pages
@@ -65,7 +65,7 @@ graph TD
 | `catalog` | Products, categories, sizing |
 | `inventory` | Stock per item/variant (most items are one-of-a-kind) |
 | `orders` | Order lifecycle |
-| `payments` | Stripe Checkout integration |
+| `payments` | Square payment links, webhook fulfillment |
 | `instagram` | oEmbed link management per product |
 | `media` | Image upload/serve via Cloudflare R2 |
 
@@ -81,7 +81,7 @@ graph TD
 | Backend hosting | Google Cloud Run | 2M req/month free, scales to zero, managed TLS | Free |
 | Database | Neon PostgreSQL | Serverless, 0.5 GB free tier | Free |
 | Object storage | Cloudflare R2 | 10 GB free, no egress fees | Free |
-| Payments | Stripe Checkout | Hosted checkout, webhook fulfillment | $100 credit |
+| Payments | Square | Payment links, unified in-person + online payments | 2.9% + 30¢ |
 | ORM / queries | sqlc + goose + pgx/v5 | Type-safe SQL, zero runtime overhead | Free |
 | CI/CD | GitHub Actions | Lint, test, build, deploy | Free |
 
@@ -114,7 +114,7 @@ retrosnack/
 │       │   ├── catalog/           # Products, categories, sizing
 │       │   ├── inventory/         # Stock tracking
 │       │   ├── orders/            # Order lifecycle
-│       │   ├── payments/          # Stripe Checkout
+│       │   ├── payments/          # Square payment links
 │       │   ├── instagram/         # oEmbed link management
 │       │   └── media/             # Image upload via R2
 │       ├── db/
@@ -178,7 +178,7 @@ A `Makefile` is provided so you don't need to remember individual commands or pa
    cp .env.example .env
    ```
 
-   The defaults in `.env.example` point at the local Docker Postgres — no changes needed to get started. Fill in Stripe and R2 keys if you need to test payments or image uploads.
+   The defaults in `.env.example` point at the local Docker Postgres — no changes needed to get started. Fill in Square and R2 keys if you need to test payments or image uploads.
 
 3. **Install dependencies and start the database**
 
@@ -238,11 +238,12 @@ Run `make help` to see all available commands.
 - Product images uploaded via Go `media` module using the S3-compatible API.
 - Served directly from R2 public bucket URL or via Cloudflare CDN.
 
-### Stripe
+### Square
 
-- Payments handled via Stripe Checkout (hosted, redirect-based).
-- Fulfillment triggered by webhook at `POST /api/webhooks/stripe`.
-- Stripe signing secret validated on every webhook event.
+- Payments handled via Square payment links (redirect-based).
+- Fulfillment triggered by webhook at `POST /api/webhooks/square`.
+- Square HMAC signature validated on every webhook event.
+- Unified payment provider for both in-person and online sales.
 
 ---
 
@@ -252,8 +253,10 @@ Run `make help` to see all available commands.
 |---|---|---|
 | `DATABASE_URL` | Neon PostgreSQL connection string | `postgres://user:pass@host/db?sslmode=require` |
 | `JWT_SECRET` | Secret for signing JWT tokens | `random-32-byte-string` |
-| `STRIPE_SECRET_KEY` | Stripe API secret key | `sk_live_...` |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret | `whsec_...` |
+| `SQUARE_ACCESS_TOKEN` | Square API access token | `EAAAl...` |
+| `SQUARE_LOCATION_ID` | Square location ID | `L...` |
+| `SQUARE_WEBHOOK_SIG_KEY` | Square webhook signature key | `...` |
+| `SQUARE_WEBHOOK_NOTIF_URL` | Square webhook notification URL | `https://api.retrosnack.shop/api/webhooks/square` |
 | `R2_ACCOUNT_ID` | Cloudflare account ID | `abc123...` |
 | `R2_ACCESS_KEY_ID` | R2 S3-compatible access key | `...` |
 | `R2_SECRET_ACCESS_KEY` | R2 S3-compatible secret key | `...` |

@@ -39,15 +39,25 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: latest
-            - name: STRIPE_SECRET_KEY
+            - name: SQUARE_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: stripe-secret-key
+                  name: square-access-token
                   key: latest
-            - name: STRIPE_WEBHOOK_SECRET
+            - name: SQUARE_LOCATION_ID
               valueFrom:
                 secretKeyRef:
-                  name: stripe-webhook-secret
+                  name: square-location-id
+                  key: latest
+            - name: SQUARE_WEBHOOK_SIG_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: square-webhook-sig-key
+                  key: latest
+            - name: SQUARE_WEBHOOK_NOTIF_URL
+              valueFrom:
+                secretKeyRef:
+                  name: square-webhook-notif-url
                   key: latest
             - name: R2_ACCOUNT_ID
               valueFrom:
