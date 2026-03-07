@@ -42,7 +42,7 @@ func (r *repository) ListProducts(ctx context.Context, limit, offset int) ([]Pro
 	}
 	defer rows.Close()
 
-	var products []Product
+	products := make([]Product, 0)
 	for rows.Next() {
 		var p Product
 		if err := rows.Scan(
@@ -51,6 +51,7 @@ func (r *repository) ListProducts(ctx context.Context, limit, offset int) ([]Pro
 		); err != nil {
 			return nil, err
 		}
+		p.Images = make([]ProductImage, 0)
 		products = append(products, p)
 	}
 	return products, rows.Err()
@@ -70,6 +71,7 @@ func (r *repository) GetProductByID(ctx context.Context, id uuid.UUID) (*Product
 	if err != nil {
 		return nil, err
 	}
+	p.Images = make([]ProductImage, 0)
 	return &p, nil
 }
 
@@ -89,6 +91,7 @@ func (r *repository) CreateProduct(ctx context.Context, sellerID *uuid.UUID, req
 	if err != nil {
 		return nil, err
 	}
+	p.Images = make([]ProductImage, 0)
 	return &p, nil
 }
 
@@ -113,6 +116,7 @@ func (r *repository) UpdateProduct(ctx context.Context, id uuid.UUID, req Update
 	if err != nil {
 		return nil, err
 	}
+	p.Images = make([]ProductImage, 0)
 	return &p, nil
 }
 
@@ -130,7 +134,7 @@ func (r *repository) ListCategories(ctx context.Context) ([]Category, error) {
 	}
 	defer rows.Close()
 
-	var categories []Category
+	categories := make([]Category, 0)
 	for rows.Next() {
 		var c Category
 		if err := rows.Scan(&c.ID, &c.Name, &c.Slug, &c.ParentID); err != nil {
@@ -153,7 +157,7 @@ func (r *repository) ListVariants(ctx context.Context, productID uuid.UUID) ([]V
 
 	defer rows.Close()
 
-	var variants []Variant
+	variants := make([]Variant, 0)
 	for rows.Next() {
 		var v Variant
 		if err := rows.Scan(&v.ID, &v.ProductID, &v.Size, &v.Color, &v.SKU, &v.CreatedAt); err != nil {

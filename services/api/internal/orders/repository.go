@@ -31,6 +31,7 @@ func (r *repository) CreateOrder(ctx context.Context, userID *uuid.UUID, items [
 	defer tx.Rollback(ctx)
 
 	var o Order
+	o.Items = make([]OrderItem, 0, len(items))
 	err = tx.QueryRow(ctx,
 		`INSERT INTO orders (user_id, status, total_cents)
 		 VALUES ($1, 'pending', $2)
@@ -71,6 +72,7 @@ func (r *repository) GetOrderByID(ctx context.Context, id uuid.UUID) (*Order, er
 	if err != nil {
 		return nil, err
 	}
+	o.Items = make([]OrderItem, 0)
 
 	rows, err := r.db.Query(ctx,
 		`SELECT id, order_id, variant_id, quantity, price_cents

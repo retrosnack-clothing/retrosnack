@@ -2,7 +2,6 @@ package media
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -48,9 +47,6 @@ func (h *Handler) uploadImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-
-	sizeStr := strconv.FormatInt(header.Size, 10)
-	_ = sizeStr
 
 	upload, err := h.svc.Upload(r.Context(), productID, header.Filename, file, header.Size)
 	if err != nil {
