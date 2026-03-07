@@ -71,6 +71,28 @@ func (r *repository) GetOrderByID(ctx context.Context, id uuid.UUID) (*Order, er
 	if err != nil {
 		return nil, err
 	}
+
+	rows, err := r.db.Query(ctx,
+		`SELECT id, order_id, variant_id, quantity, price_cents
+		 FROM order_items WHERE order_id = $1`,
+		id,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var oi OrderItem
+		if err := rows.Scan(&oi.ID, &oi.OrderID, &oi.VariantID, &oi.Quantity, &oi.PriceCents); err != nil {
+			return nil, err
+		}
+		o.Items = append(o.Items, oi)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return &o, nil
 }
 

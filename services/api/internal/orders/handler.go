@@ -2,6 +2,7 @@ package orders
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -26,6 +27,14 @@ func (h *Handler) Register(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.Auth(h.jwtSecret))
 		r.Get("/orders/{id}", h.getOrder)
+	})
+
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.Auth(h.jwtSecret))
+		r.Use(middleware.RequireRole("admin"))
+		r.Post("/orders/{id}/ship", h.shipOrder)
+		r.Post("/orders/{id}/deliver", h.deliverOrder)
+		r.Post("/orders/{id}/cancel", h.cancelOrder)
 	})
 }
 
@@ -62,6 +71,60 @@ func (h *Handler) getOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	httputil.JSON(w, http.StatusOK, order)
+}
+
+func (h *Handler) shipOrder(w http.ResponseWriter, r *http.Request) {
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "invalid order id")
+		return
+	}
+
+	if err := h.svc.MarkShipped(r.Context(), id); err != nil {
+		if errors.Is(err, ErrInvalidTransition) {
+			httputil.ErrorMsg(w, http.StatusConflict, "order must be paid before shipping")
+			return
+		}
+		httputil.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+	httputil.NoContent(w)
+}
+
+func (h *Handler) deliverOrder(w http.ResponseWriter, r *http.Request) {
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "invalid order id")
+		return
+	}
+
+	if err := h.svc.MarkDelivered(r.Context(), id); err != nil {
+		if errors.Is(err, ErrInvalidTransition) {
+			httputil.ErrorMsg(w, http.StatusConflict, "order must be shipped before delivering")
+			return
+		}
+		httputil.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+	httputil.NoContent(w)
+}
+
+func (h *Handler) cancelOrder(w http.ResponseWriter, r *http.Request) {
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "invalid order id")
+		return
+	}
+
+	if err := h.svc.CancelOrder(r.Context(), id); err != nil {
+		if errors.Is(err, ErrInvalidTransition) {
+			httputil.ErrorMsg(w, http.StatusConflict, "only pending orders can be cancelled")
+			return
+		}
+		httputil.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+	httputil.NoContent(w)
 }
 
 func validateCreateOrder(req CreateOrderRequest) string {

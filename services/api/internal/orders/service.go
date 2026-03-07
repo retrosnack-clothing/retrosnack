@@ -2,17 +2,23 @@ package orders
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 
 	"github.com/google/uuid"
 	"github.com/retrosnack-clothing/retrosnack/internal/inventory"
 )
 
+var ErrInvalidTransition = errors.New("invalid status transition")
+
 type Service interface {
 	CreateOrder(ctx context.Context, userID *uuid.UUID, req CreateOrderRequest) (*Order, error)
 	GetOrder(ctx context.Context, id uuid.UUID) (*Order, error)
 	GetOrderByStripeSession(ctx context.Context, sessionID string) (*Order, error)
 	MarkPaid(ctx context.Context, orderID uuid.UUID) error
+	MarkShipped(ctx context.Context, orderID uuid.UUID) error
+	MarkDelivered(ctx context.Context, orderID uuid.UUID) error
+	CancelOrder(ctx context.Context, orderID uuid.UUID) error
 	SetStripeSession(ctx context.Context, orderID uuid.UUID, sessionID string) error
 }
 
@@ -83,6 +89,48 @@ func (s *service) MarkPaid(ctx context.Context, orderID uuid.UUID) error {
 				"error", err,
 			)
 		}
+	}
+
+	return nil
+}
+
+func (s *service) MarkShipped(ctx context.Context, orderID uuid.UUID) error {
+	order, err := s.repo.GetOrderByID(ctx, orderID)
+	if err != nil {
+		return err
+	}
+	if order.Status != StatusPaid {
+		return ErrInvalidTransition
+	}
+	return s.repo.UpdateStatus(ctx, orderID, StatusShipped)
+}
+
+func (s *service) MarkDelivered(ctx context.Context, orderID uuid.UUID) error {
+	order, err := s.repo.GetOrderByID(ctx, orderID)
+	if err != nil {
+		return err
+	}
+	if order.Status != StatusShipped {
+		return ErrInvalidTransition
+	}
+	return s.repo.UpdateStatus(ctx, orderID, StatusDelivered)
+}
+
+func (s *service) CancelOrder(ctx context.Context, orderID uuid.UUID) error {
+	order, err := s.repo.GetOrderByID(ctx, orderID)
+	if err != nil {
+		return err
+	}
+	if order.Status != StatusPending {
+		return ErrInvalidTransition
+	}
+
+	if err := s.repo.UpdateStatus(ctx, orderID, StatusCancelled); err != nil {
+		return err
+	}
+
+	for _, item := range order.Items {
+		_ = s.inventory.Release(ctx, item.VariantID, item.Quantity)
 	}
 
 	return nil
