@@ -3,6 +3,7 @@ package instagram
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -56,6 +57,11 @@ func (h *Handler) refreshEmbed(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		httputil.ErrorMsg(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	if body.PostURL == "" || (!strings.HasPrefix(body.PostURL, "https://www.instagram.com/") && !strings.HasPrefix(body.PostURL, "https://instagram.com/")) {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "post_url must be a valid instagram url")
 		return
 	}
 
