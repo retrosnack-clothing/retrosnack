@@ -3,6 +3,7 @@ package catalog
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -39,7 +40,21 @@ func (h *Handler) Register(r chi.Router) {
 }
 
 func (h *Handler) listProducts(w http.ResponseWriter, r *http.Request) {
-	products, err := h.svc.ListProducts(r.Context())
+	limit := 20
+	offset := 0
+
+	if v := r.URL.Query().Get("limit"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 && n <= 100 {
+			limit = n
+		}
+	}
+	if v := r.URL.Query().Get("offset"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n >= 0 {
+			offset = n
+		}
+	}
+
+	products, err := h.svc.ListProducts(r.Context(), limit, offset)
 	if err != nil {
 		httputil.Error(w, http.StatusInternalServerError, err)
 		return

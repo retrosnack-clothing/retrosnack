@@ -8,7 +8,7 @@ import (
 )
 
 type Repository interface {
-	ListProducts(ctx context.Context) ([]Product, error)
+	ListProducts(ctx context.Context, limit, offset int) ([]Product, error)
 	GetProductByID(ctx context.Context, id uuid.UUID) (*Product, error)
 	CreateProduct(ctx context.Context, sellerID *uuid.UUID, req CreateProductRequest) (*Product, error)
 	UpdateProduct(ctx context.Context, id uuid.UUID, req UpdateProductRequest) (*Product, error)
@@ -28,12 +28,14 @@ func NewRepository(db *pgxpool.Pool) Repository {
 	return &repository{db: db}
 }
 
-func (r *repository) ListProducts(ctx context.Context) ([]Product, error) {
+func (r *repository) ListProducts(ctx context.Context, limit, offset int) ([]Product, error) {
 	rows, err := r.db.Query(ctx,
 		`SELECT id, title, description, category_id, brand, condition,
 		        price_cents, seller_id, instagram_post_url, created_at, updated_at
 		 FROM products
-		 ORDER BY created_at DESC`,
+		 ORDER BY created_at DESC
+		 LIMIT $1 OFFSET $2`,
+		limit, offset,
 	)
 	if err != nil {
 		return nil, err

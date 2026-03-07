@@ -10,7 +10,7 @@ import (
 var ErrNotFound = errors.New("product not found")
 
 type Service interface {
-	ListProducts(ctx context.Context) ([]Product, error)
+	ListProducts(ctx context.Context, limit, offset int) ([]Product, error)
 	GetProduct(ctx context.Context, id uuid.UUID) (*Product, error)
 	CreateProduct(ctx context.Context, sellerID *uuid.UUID, req CreateProductRequest) (*Product, error)
 	UpdateProduct(ctx context.Context, id uuid.UUID, req UpdateProductRequest) (*Product, error)
@@ -30,8 +30,8 @@ func NewService(repo Repository) Service {
 	return &service{repo: repo}
 }
 
-func (s *service) ListProducts(ctx context.Context) ([]Product, error) {
-	return s.repo.ListProducts(ctx)
+func (s *service) ListProducts(ctx context.Context, limit, offset int) ([]Product, error) {
+	return s.repo.ListProducts(ctx, limit, offset)
 }
 
 func (s *service) GetProduct(ctx context.Context, id uuid.UUID) (*Product, error) {
