@@ -76,6 +76,11 @@ func (s *service) MarkPaid(ctx context.Context, orderID uuid.UUID) error {
 		return err
 	}
 
+	// idempotency: if already paid (or further along), skip
+	if order.Status != StatusPending {
+		return nil
+	}
+
 	if err := s.repo.UpdateStatus(ctx, orderID, StatusPaid); err != nil {
 		return err
 	}
