@@ -29,7 +29,7 @@ func NewService(repo Repository, jwtSecret string) Service {
 }
 
 func (s *service) Register(ctx context.Context, req RegisterRequest) (*TokenResponse, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), 12)
 	if err != nil {
 		return nil, err
 	}
