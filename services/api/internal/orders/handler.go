@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -26,6 +27,7 @@ func (h *Handler) Register(r chi.Router) {
 
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.Auth(h.jwtSecret))
+		r.Get("/orders", h.listOrders)
 		r.Get("/orders/{id}", h.getOrder)
 	})
 
@@ -67,6 +69,54 @@ func (h *Handler) createOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	httputil.JSON(w, http.StatusCreated, order)
+}
+
+func (h *Handler) listOrders(w http.ResponseWriter, r *http.Request) {
+	claims, ok := middleware.ClaimsFromContext(r.Context())
+	if !ok {
+		httputil.ErrorMsg(w, http.StatusUnauthorized, "unauthorized")
+		return
+	}
+	m := (*claims)
+
+	limit, offset := parsePagination(r)
+
+	role, _ := m["role"].(string)
+	if role == "admin" {
+		orders, err := h.svc.ListAll(r.Context(), limit, offset)
+		if err != nil {
+			httputil.Error(w, http.StatusInternalServerError, err)
+			return
+		}
+		httputil.JSON(w, http.StatusOK, orders)
+		return
+	}
+
+	sub, _ := m["sub"].(string)
+	userID, err := uuid.Parse(sub)
+	if err != nil {
+		httputil.ErrorMsg(w, http.StatusUnauthorized, "invalid token")
+		return
+	}
+
+	orders, err := h.svc.ListByUser(r.Context(), userID, limit, offset)
+	if err != nil {
+		httputil.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+	httputil.JSON(w, http.StatusOK, orders)
+}
+
+func parsePagination(r *http.Request) (limit, offset int) {
+	limit = 20
+	offset = 0
+	if v, err := strconv.Atoi(r.URL.Query().Get("limit")); err == nil && v > 0 && v <= 100 {
+		limit = v
+	}
+	if v, err := strconv.Atoi(r.URL.Query().Get("offset")); err == nil && v >= 0 {
+		offset = v
+	}
+	return
 }
 
 func (h *Handler) getOrder(w http.ResponseWriter, r *http.Request) {
