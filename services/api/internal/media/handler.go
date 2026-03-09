@@ -9,7 +9,7 @@ import (
 	"github.com/retrosnack-clothing/retrosnack/pkg/middleware"
 )
 
-const maxUploadSize = 10 << 20 // 10 MB
+const maxUploadSize = 5 << 20 // 5 MB per image
 
 type Handler struct {
 	svc       Service
