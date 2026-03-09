@@ -27,9 +27,9 @@ func (r *repository) CreateImage(ctx context.Context, productID uuid.UUID, r2Key
 	err := r.db.QueryRow(ctx,
 		`INSERT INTO product_images (product_id, r2_key, url, position)
 		 VALUES ($1, $2, $3, $4)
-		 RETURNING id, product_id, url, position`,
+		 RETURNING id, product_id, r2_key, url, position`,
 		productID, r2Key, url, position,
-	).Scan(&img.ID, &img.ProductID, &img.URL, &img.Position)
+	).Scan(&img.ID, &img.ProductID, &img.R2Key, &img.URL, &img.Position)
 	if err != nil {
 		return nil, err
 	}
@@ -71,9 +71,9 @@ func (r *repository) DeleteImage(ctx context.Context, id uuid.UUID) (*ProductIma
 	var img ProductImageRecord
 	err := r.db.QueryRow(ctx,
 		`DELETE FROM product_images WHERE id = $1
-		 RETURNING id, product_id, url, position`,
+		 RETURNING id, product_id, r2_key, url, position`,
 		id,
-	).Scan(&img.ID, &img.ProductID, &img.URL, &img.Position)
+	).Scan(&img.ID, &img.ProductID, &img.R2Key, &img.URL, &img.Position)
 	if err != nil {
 		return nil, err
 	}
