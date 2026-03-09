@@ -71,7 +71,11 @@ func (r *repository) GetProductByID(ctx context.Context, id uuid.UUID) (*Product
 	if err != nil {
 		return nil, err
 	}
-	p.Images = make([]ProductImage, 0)
+
+	p.Images, err = r.loadProductImages(ctx, id)
+	if err != nil {
+		return nil, err
+	}
 	return &p, nil
 }
 
@@ -195,4 +199,26 @@ func (r *repository) SetStock(ctx context.Context, variantID uuid.UUID, quantity
 		variantID, quantity,
 	)
 	return err
+}
+
+func (r *repository) loadProductImages(ctx context.Context, productID uuid.UUID) ([]ProductImage, error) {
+	rows, err := r.db.Query(ctx,
+		`SELECT id, product_id, url, position
+		 FROM product_images WHERE product_id = $1 ORDER BY position`,
+		productID,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	images := make([]ProductImage, 0)
+	for rows.Next() {
+		var img ProductImage
+		if err := rows.Scan(&img.ID, &img.ProductID, &img.URL, &img.Position); err != nil {
+			return nil, err
+		}
+		images = append(images, img)
+	}
+	return images, rows.Err()
 }
