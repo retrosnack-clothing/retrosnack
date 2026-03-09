@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -11,6 +12,8 @@ type Repository interface {
 	CreateOrder(ctx context.Context, userID *uuid.UUID, items []OrderItemInput, totalCents int64) (*Order, error)
 	GetOrderByID(ctx context.Context, id uuid.UUID) (*Order, error)
 	GetOrderByCheckoutSession(ctx context.Context, sessionID string) (*Order, error)
+	ListByUser(ctx context.Context, userID uuid.UUID, limit, offset int) ([]Order, error)
+	ListAll(ctx context.Context, limit, offset int) ([]Order, error)
 	UpdateStatus(ctx context.Context, id uuid.UUID, status Status) error
 	SetCheckoutSession(ctx context.Context, id uuid.UUID, sessionID string) error
 }
@@ -109,6 +112,47 @@ func (r *repository) GetOrderByCheckoutSession(ctx context.Context, sessionID st
 		return nil, err
 	}
 	return &o, nil
+}
+
+func (r *repository) ListByUser(ctx context.Context, userID uuid.UUID, limit, offset int) ([]Order, error) {
+	rows, err := r.db.Query(ctx,
+		`SELECT id, user_id, status, total_cents, checkout_session_id, created_at, updated_at
+		 FROM orders WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+		userID, limit, offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return scanOrders(rows)
+}
+
+func (r *repository) ListAll(ctx context.Context, limit, offset int) ([]Order, error) {
+	rows, err := r.db.Query(ctx,
+		`SELECT id, user_id, status, total_cents, checkout_session_id, created_at, updated_at
+		 FROM orders ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
+		limit, offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return scanOrders(rows)
+}
+
+func scanOrders(rows pgx.Rows) ([]Order, error) {
+	orders := make([]Order, 0)
+	for rows.Next() {
+		var o Order
+		if err := rows.Scan(&o.ID, &o.UserID, &o.Status, &o.TotalCents, &o.CheckoutSessionID, &o.CreatedAt, &o.UpdatedAt); err != nil {
+			return nil, err
+		}
+		o.Items = make([]OrderItem, 0)
+		orders = append(orders, o)
+	}
+	return orders, rows.Err()
 }
 
 func (r *repository) UpdateStatus(ctx context.Context, id uuid.UUID, status Status) error {
