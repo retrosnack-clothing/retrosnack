@@ -85,7 +85,8 @@ func run(logger *slog.Logger) error {
 	instagramSvc := instagram.NewService(instagramRepo)
 	instagramHandler := instagram.NewHandler(instagramSvc, cfg.JWTSecret)
 
-	mediaSvc := media.NewService(cfg)
+	mediaRepo := media.NewRepository(pool)
+	mediaSvc := media.NewService(cfg, mediaRepo)
 	mediaHandler := media.NewHandler(mediaSvc, cfg.JWTSecret)
 
 	// health monitoring
@@ -110,7 +111,9 @@ func run(logger *slog.Logger) error {
 	r.Use(middleware.MaxBodySize(10 << 20)) // 10 MB
 
 	checker := k.Checker()
-	r.Get("/health", kenko.HandleHealth(checker))
+	healthHandler := kenko.HandleHealth(checker)
+	r.Get("/health", healthHandler)
+	r.Head("/health", healthHandler)
 	r.Get("/ready", kenko.HandleReady(checker))
 	r.Get("/status", kenko.HandleStatus(checker))
 
