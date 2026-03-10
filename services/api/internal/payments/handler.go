@@ -7,20 +7,32 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 	"github.com/retrosnack-clothing/retrosnack/pkg/httputil"
 )
 
 type Handler struct {
-	svc Service
+	svc           Service
+	applicationID string
+	locationID    string
 }
 
-func NewHandler(svc Service) *Handler {
-	return &Handler{svc: svc}
+func NewHandler(svc Service, applicationID, locationID string) *Handler {
+	return &Handler{svc: svc, applicationID: applicationID, locationID: locationID}
 }
 
 func (h *Handler) Register(r chi.Router) {
+	r.Get("/payments/config", h.paymentConfig)
 	r.Post("/checkout", h.createCheckout)
+	r.Post("/payments/process", h.processPayment)
 	r.Post("/webhooks/square", h.squareWebhook)
+}
+
+func (h *Handler) paymentConfig(w http.ResponseWriter, r *http.Request) {
+	httputil.JSON(w, http.StatusOK, map[string]string{
+		"application_id": h.applicationID,
+		"location_id":    h.locationID,
+	})
 }
 
 func (h *Handler) createCheckout(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +55,30 @@ func (h *Handler) createCheckout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	httputil.JSON(w, http.StatusOK, sess)
+}
+
+func (h *Handler) processPayment(w http.ResponseWriter, r *http.Request) {
+	var req ProcessPaymentRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	if req.SourceID == "" {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "source_id is required")
+		return
+	}
+	if req.OrderID == (uuid.UUID{}) {
+		httputil.ErrorMsg(w, http.StatusBadRequest, "order_id is required")
+		return
+	}
+
+	result, err := h.svc.ProcessPayment(r.Context(), req)
+	if err != nil {
+		httputil.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+	httputil.JSON(w, http.StatusOK, result)
 }
 
 func (h *Handler) squareWebhook(w http.ResponseWriter, r *http.Request) {
