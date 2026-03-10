@@ -35,8 +35,13 @@
 
       <div class="flex flex-col justify-center gap-6">
         <div>
+          <p class="text-sm text-ink-muted mb-1">{product.brand}</p>
           <h1 class="text-2xl md:text-3xl font-semibold">{product.title}</h1>
-          <p class="mt-2 text-ink-muted">size {product.size}</p>
+        </div>
+
+        <div class="flex items-center gap-3 text-sm text-ink-muted">
+          <span class="bg-tag px-3 py-1 rounded-full">size {product.size}</span>
+          <span class="bg-tag px-3 py-1 rounded-full">{product.condition}</span>
         </div>
 
         <p class="text-3xl font-semibold">
