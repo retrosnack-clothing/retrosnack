@@ -10,4 +10,7 @@
   --color-accent-hover: #A84B22;
   --color-border: #D1C4B5;
   --color-tag: #F0E6DB;
+
+  --font-display: "Fraunces", serif;
+  --font-body: system-ui, -apple-system, sans-serif;
 }
