@@ -28,10 +28,14 @@ type service struct {
 	webhookNotifURL string
 }
 
-func NewService(ordersSvc orders.Service, accessToken, locationID, webhookSigKey, webhookNotifURL string) Service {
-	c := squareclient.NewClient(
+func NewService(ordersSvc orders.Service, accessToken, locationID, webhookSigKey, webhookNotifURL, squareEnv string) Service {
+	opts := []option.RequestOption{
 		option.WithToken(accessToken),
-	)
+	}
+	if squareEnv == "sandbox" {
+		opts = append(opts, option.WithBaseURL(square.Environments.Sandbox))
+	}
+	c := squareclient.NewClient(opts...)
 	return &service{
 		orders:          ordersSvc,
 		square:          c,
