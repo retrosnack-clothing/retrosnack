@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>{product ? product.title : 'not found'} — retrosnack</title>
+  <title>{product ? product.title : 'not found'} — retrosnack clothing</title>
 </svelte:head>
 
 {#if product}
@@ -26,7 +26,7 @@
           <p class="mt-2 text-ink-muted">size {product.size}</p>
         </div>
 
-        <p class="font-display text-3xl font-semibold">
+        <p class="text-3xl font-semibold">
           ${(product.price / 100).toFixed(2)}
         </p>
 

@@ -23,7 +23,7 @@
     <h3 class="text-sm font-medium truncate">{title}</h3>
     <div class="flex items-center justify-between text-sm">
       <span class="text-ink-muted">{size}</span>
-      <span class="font-display font-semibold">${(price / 100).toFixed(2)}</span>
+      <span class="font-semibold">${(price / 100).toFixed(2)}</span>
     </div>
   </div>
 </a>

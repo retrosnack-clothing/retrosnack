@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-  <title>shop — retrosnack</title>
+  <title>shop — retrosnack clothing</title>
 </svelte:head>
 
 <section class="mx-auto max-w-6xl px-4 py-12">

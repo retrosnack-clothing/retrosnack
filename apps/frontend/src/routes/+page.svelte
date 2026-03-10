@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-  <title>retrosnack — thrift finds, loved again</title>
+  <title>retrosnack clothing — thrift finds, loved again</title>
 </svelte:head>
 
 <HeroSection />
