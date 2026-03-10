@@ -1,6 +1,10 @@
 <script lang="ts">
 	import '../app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import { onMount } from 'svelte';
+
+	let { children } = $props();
 
 	onMount(async () => {
 		if ('serviceWorker' in navigator) {
@@ -10,4 +14,10 @@
 	});
 </script>
 
-<slot />
+<div class="flex flex-col min-h-screen">
+	<Navbar />
+	<main class="flex-1">
+		{@render children()}
+	</main>
+	<Footer />
+</div>
