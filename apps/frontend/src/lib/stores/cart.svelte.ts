@@ -32,38 +32,23 @@ export const cart = {
   },
 
   get count() {
-    return items.reduce((sum, item) => sum + item.quantity, 0);
+    return items.length;
   },
 
   get totalCents() {
-    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return items.reduce((sum, item) => sum + item.price, 0);
   },
 
   add(product: Omit<CartItem, 'quantity'>) {
     const existing = items.find((i) => i.id === product.id);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      items.push({ ...product, quantity: 1 });
-    }
+    if (existing) return;
+    items.push({ ...product, quantity: 1 });
     saveToStorage(items);
   },
 
   remove(id: string) {
     items = items.filter((i) => i.id !== id);
     saveToStorage(items);
-  },
-
-  updateQuantity(id: string, quantity: number) {
-    if (quantity <= 0) {
-      this.remove(id);
-      return;
-    }
-    const item = items.find((i) => i.id === id);
-    if (item) {
-      item.quantity = quantity;
-      saveToStorage(items);
-    }
   },
 
   clear() {

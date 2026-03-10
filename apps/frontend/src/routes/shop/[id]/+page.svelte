@@ -4,10 +4,10 @@
   import { cart } from '$lib/stores/cart.svelte';
 
   const product = $derived(mockProducts.find((p) => p.id === page.params.id));
-  let added = $state(false);
+  const inCart = $derived(cart.items.some((i) => i.id === page.params.id));
 
   function addToCart() {
-    if (!product) return;
+    if (!product || inCart) return;
     cart.add({
       id: product.id,
       title: product.title,
@@ -15,8 +15,6 @@
       size: product.size,
       image: product.image,
     });
-    added = true;
-    setTimeout(() => (added = false), 1500);
   }
 </script>
 
@@ -46,12 +44,21 @@
         </p>
 
         <div class="flex flex-col gap-3">
-          <button
-            onclick={addToCart}
-            class="bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium hover:bg-ink/85 transition-colors"
-          >
-            {added ? 'added ✓' : 'add to bag'}
-          </button>
+          {#if inCart}
+            <a
+              href="/cart"
+              class="bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium text-center hover:bg-ink/85 transition-colors"
+            >
+              in your bag — view bag
+            </a>
+          {:else}
+            <button
+              onclick={addToCart}
+              class="bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium hover:bg-ink/85 transition-colors"
+            >
+              add to bag
+            </button>
+          {/if}
 
           <a
             href="https://instagram.com/retrosnack.shop"
