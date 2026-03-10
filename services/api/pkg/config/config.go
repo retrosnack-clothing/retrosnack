@@ -9,6 +9,7 @@ type Config struct {
 	DatabaseURL            string
 	JWTSecret              string
 	SquareAccessToken      string
+	SquareApplicationID    string
 	SquareLocationID       string
 	SquareWebhookSigKey    string
 	SquareWebhookNotifURL  string
@@ -36,6 +37,7 @@ func Load() (*Config, error) {
 		DatabaseURL:           require("DATABASE_URL"),
 		JWTSecret:             require("JWT_SECRET"),
 		SquareAccessToken:     os.Getenv("SQUARE_ACCESS_TOKEN"),
+		SquareApplicationID:   os.Getenv("SQUARE_APPLICATION_ID"),
 		SquareLocationID:      os.Getenv("SQUARE_LOCATION_ID"),
 		SquareWebhookSigKey:   os.Getenv("SQUARE_WEBHOOK_SIG_KEY"),
 		SquareWebhookNotifURL: os.Getenv("SQUARE_WEBHOOK_NOTIF_URL"),
