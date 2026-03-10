@@ -16,6 +16,7 @@ import (
 
 type Service interface {
 	CreateCheckout(ctx context.Context, req CreateCheckoutRequest, redirectURL string) (*CheckoutSession, error)
+	ProcessPayment(ctx context.Context, req ProcessPaymentRequest) (*PaymentResult, error)
 	HandleWebhook(ctx context.Context, payload []byte, signatureHeader string) error
 }
 
@@ -94,6 +95,47 @@ func (s *service) CreateCheckout(ctx context.Context, req CreateCheckoutRequest,
 		ID:      *link.ID,
 		OrderID: order.ID,
 		URL:     url,
+	}, nil
+}
+
+func (s *service) ProcessPayment(ctx context.Context, req ProcessPaymentRequest) (*PaymentResult, error) {
+	order, err := s.orders.GetOrder(ctx, req.OrderID)
+	if err != nil {
+		return nil, fmt.Errorf("order not found: %w", err)
+	}
+
+	idempotencyKey := uuid.New().String()
+
+	resp, err := s.square.Payments.Create(ctx, &square.CreatePaymentRequest{
+		SourceID:       req.SourceID,
+		IdempotencyKey: idempotencyKey,
+		AmountMoney: &square.Money{
+			Amount:   square.Int64(order.TotalCents),
+			Currency: square.CurrencyCad.Ptr(),
+		},
+		LocationID:  &s.locationID,
+		ReferenceID: square.String(order.ID.String()),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("payment failed: %w", err)
+	}
+
+	if resp.Payment == nil || resp.Payment.ID == nil {
+		return nil, fmt.Errorf("square returned empty payment")
+	}
+
+	status := "pending"
+	if resp.Payment.Status != nil && *resp.Payment.Status == "COMPLETED" {
+		if err := s.orders.MarkPaid(ctx, order.ID); err != nil {
+			return nil, fmt.Errorf("failed to mark order paid: %w", err)
+		}
+		status = "paid"
+	}
+
+	return &PaymentResult{
+		OrderID:   order.ID,
+		PaymentID: *resp.Payment.ID,
+		Status:    status,
 	}, nil
 }
 
