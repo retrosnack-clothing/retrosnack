@@ -40,6 +40,14 @@ export const api = {
 				body: JSON.stringify({ order_id: orderId }),
 			}),
 	},
+	payments: {
+		config: () => request<PaymentConfig>('/api/payments/config'),
+		process: (orderId: string, sourceId: string) =>
+			request<PaymentResult>('/api/payments/process', {
+				method: 'POST',
+				body: JSON.stringify({ order_id: orderId, source_id: sourceId }),
+			}),
+	},
 };
 
 // types — kept in sync with go models
@@ -118,4 +126,16 @@ export interface CheckoutSession {
 	id: string;
 	order_id: string;
 	url: string;
+}
+
+export interface PaymentConfig {
+	application_id: string;
+	location_id: string;
+	environment: string;
+}
+
+export interface PaymentResult {
+	order_id: string;
+	payment_id: string;
+	status: string;
 }
