@@ -15,10 +15,11 @@ type Handler struct {
 	svc           Service
 	applicationID string
 	locationID    string
+	environment   string
 }
 
-func NewHandler(svc Service, applicationID, locationID string) *Handler {
-	return &Handler{svc: svc, applicationID: applicationID, locationID: locationID}
+func NewHandler(svc Service, applicationID, locationID, environment string) *Handler {
+	return &Handler{svc: svc, applicationID: applicationID, locationID: locationID, environment: environment}
 }
 
 func (h *Handler) Register(r chi.Router) {
@@ -32,6 +33,7 @@ func (h *Handler) paymentConfig(w http.ResponseWriter, r *http.Request) {
 	httputil.JSON(w, http.StatusOK, map[string]string{
 		"application_id": h.applicationID,
 		"location_id":    h.locationID,
+		"environment":    h.environment,
 	})
 }
 
