@@ -49,7 +49,14 @@
         </p>
 
         <div class="flex flex-col gap-3">
-          {#if inCart}
+          {#if product.sold}
+            <button
+              disabled
+              class="bg-ink/40 text-sand px-6 py-3 rounded-full text-sm font-medium cursor-not-allowed"
+            >
+              sold
+            </button>
+          {:else if inCart}
             <a
               href="/cart"
               class="bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium text-center hover:bg-ink/85 transition-colors"
