@@ -14,15 +14,36 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
 	products: {
-		list: () => request<Product[]>('/api/products'),
-		get: (id: string) => request<Product>(`/api/products/${id}`)
+		list: (limit = 20, offset = 0) =>
+			request<Product[]>(`/api/products?limit=${limit}&offset=${offset}`),
+		get: (id: string) => request<Product>(`/api/products/${id}`),
+		variants: (id: string) => request<Variant[]>(`/api/products/${id}/variants`),
 	},
 	categories: {
-		list: () => request<Category[]>('/api/categories')
-	}
+		list: () => request<Category[]>('/api/categories'),
+	},
+	inventory: {
+		get: (variantId: string) => request<StockItem>(`/api/inventory/${variantId}`),
+	},
+	orders: {
+		create: (items: OrderItemInput[]) =>
+			request<Order>('/api/orders', {
+				method: 'POST',
+				body: JSON.stringify({ items }),
+			}),
+		get: (id: string) => request<Order>(`/api/orders/${id}`),
+	},
+	checkout: {
+		create: (orderId: string) =>
+			request<CheckoutSession>('/api/checkout', {
+				method: 'POST',
+				body: JSON.stringify({ order_id: orderId }),
+			}),
+	},
 };
 
-// Types — kept in sync with Go models
+// types — kept in sync with go models
+
 export interface Product {
 	id: string;
 	title: string;
@@ -31,15 +52,27 @@ export interface Product {
 	condition: 'excellent' | 'good' | 'fair';
 	price_cents: number;
 	category_id: string;
+	seller_id: string | null;
 	instagram_post_url: string;
 	images: ProductImage[];
 	created_at: string;
+	updated_at: string;
 }
 
 export interface ProductImage {
 	id: string;
+	product_id: string;
 	url: string;
 	position: number;
+}
+
+export interface Variant {
+	id: string;
+	product_id: string;
+	size: string;
+	color: string;
+	sku: string;
+	created_at: string;
 }
 
 export interface Category {
@@ -47,4 +80,42 @@ export interface Category {
 	name: string;
 	slug: string;
 	parent_id: string | null;
+}
+
+export interface StockItem {
+	variant_id: string;
+	quantity: number;
+	reserved: number;
+	available: number;
+}
+
+export interface Order {
+	id: string;
+	user_id: string | null;
+	status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled';
+	total_cents: number;
+	checkout_session_id: string | null;
+	items: OrderItem[];
+	created_at: string;
+	updated_at: string;
+}
+
+export interface OrderItem {
+	id: string;
+	order_id: string;
+	variant_id: string;
+	quantity: number;
+	price_cents: number;
+}
+
+export interface OrderItemInput {
+	variant_id: string;
+	quantity: number;
+	price_cents: number;
+}
+
+export interface CheckoutSession {
+	id: string;
+	order_id: string;
+	url: string;
 }
