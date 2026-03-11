@@ -1,9 +1,9 @@
-declare global {
-	interface Window {
-		Square: {
-			payments(applicationId: string, locationId: string): any;
-		};
-	}
+declare module 'virtual:pwa-register' {
+    export function registerSW(options?: { immediate?: boolean }): void;
 }
 
-export {};
+interface Window {
+    Square: {
+        payments(applicationId: string, locationId: string): any;
+    };
+}
