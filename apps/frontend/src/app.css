@@ -1,21 +1,21 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-sand: #E6D9CD;
-  --color-sand-light: #F5EDE6;
-  --color-sand-dark: #CFC0B2;
-  --color-ink: #1A1A1A;
-  --color-ink-muted: #6B5E53;
-  --color-accent: #C75D2C;
-  --color-accent-hover: #A84B22;
-  --color-border: #D1C4B5;
-  --color-tag: #F0E6DB;
+    --color-sand: #e6d9cd;
+    --color-sand-light: #f5ede6;
+    --color-sand-dark: #cfc0b2;
+    --color-ink: #1a1a1a;
+    --color-ink-muted: #6b5e53;
+    --color-accent: #c75d2c;
+    --color-accent-hover: #a84b22;
+    --color-border: #d1c4b5;
+    --color-tag: #f0e6db;
 
-  --font-display: "Fredoka", sans-serif;
+    --font-display: 'Fredoka', sans-serif;
 }
 
 @layer base {
-  body {
-    @apply bg-sand text-ink font-display antialiased;
-  }
+    body {
+        @apply bg-sand text-ink font-display antialiased;
+    }
 }
