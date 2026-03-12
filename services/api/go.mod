@@ -1,6 +1,6 @@
 module github.com/retrosnack-clothing/retrosnack
 
-go 1.23.3
+go 1.24
 
 require (
 	github.com/aidantrabs/kenko v0.1.0
@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.46
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.69.0
 	github.com/go-chi/chi/v5 v5.1.0
-	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/square/square-go-sdk v1.5.0

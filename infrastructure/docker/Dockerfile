@@ -1,11 +1,7 @@
-# ──────────────────────────────────────────────────────────────
-# Stage: build
-# ──────────────────────────────────────────────────────────────
-FROM golang:1.23-alpine AS build
+FROM golang:1.24-alpine AS build
 
 WORKDIR /src
 
-# Cache dependencies
 COPY services/api/go.mod services/api/go.sum ./
 RUN go mod download
 
@@ -16,10 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
       -o /retrosnack-api \
       ./cmd/server
 
-# ──────────────────────────────────────────────────────────────
-# Stage: development (for docker-compose hot-reload)
-# ──────────────────────────────────────────────────────────────
-FROM golang:1.23-alpine AS development
+FROM golang:1.24-alpine AS development
 
 RUN go install github.com/air-verse/air@latest
 
@@ -29,9 +22,6 @@ RUN go mod download
 
 CMD ["air", "-c", ".air.toml"]
 
-# ──────────────────────────────────────────────────────────────
-# Stage: production (Render — TLS terminated by platform, no nginx needed)
-# ──────────────────────────────────────────────────────────────
 FROM alpine:3.21 AS production
 
 RUN apk --no-cache add ca-certificates tzdata && \
