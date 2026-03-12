@@ -118,6 +118,7 @@ func run(logger *slog.Logger) error {
 	r.Get("/status", kenko.HandleStatus(checker))
 
 	r.Route("/api", func(r chi.Router) {
+		r.Use(middleware.RequireJSON)
 		authHandler.Register(r)
 		catalogHandler.Register(r)
 		inventoryHandler.Register(r)
