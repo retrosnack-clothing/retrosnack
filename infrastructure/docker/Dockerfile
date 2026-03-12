@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS build
+FROM golang:1.26-alpine AS build
 
 WORKDIR /src
 
@@ -12,7 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
       -o /retrosnack-api \
       ./cmd/server
 
-FROM golang:1.24-alpine AS development
+FROM golang:1.26-alpine AS development
 
 RUN go install github.com/air-verse/air@latest
 

@@ -1,6 +1,6 @@
 module github.com/retrosnack-clothing/retrosnack
 
-go 1.24
+go 1.26
 
 require (
 	github.com/aidantrabs/kenko v0.1.0
