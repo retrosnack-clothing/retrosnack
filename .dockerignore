@@ -1,0 +1,10 @@
+.git
+.github
+.env*
+!.env.example
+apps/frontend/node_modules
+apps/frontend/.svelte-kit
+apps/frontend/build
+docs
+scripts
+*.md
