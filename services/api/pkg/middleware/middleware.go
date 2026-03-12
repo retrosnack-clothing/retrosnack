@@ -179,6 +179,7 @@ func RateLimit(max int, window time.Duration) func(http.Handler) http.Handler {
 
 			if v.tokens <= 0 {
 				mu.Unlock()
+				w.Header().Set("Retry-After", fmt.Sprintf("%d", int(window.Seconds())))
 				http.Error(w, "rate limit exceeded", http.StatusTooManyRequests)
 				return
 			}

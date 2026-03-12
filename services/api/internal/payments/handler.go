@@ -5,10 +5,12 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/retrosnack-clothing/retrosnack/pkg/httputil"
+	"github.com/retrosnack-clothing/retrosnack/pkg/middleware"
 )
 
 type Handler struct {
@@ -24,8 +26,11 @@ func NewHandler(svc Service, applicationID, locationID, environment string) *Han
 
 func (h *Handler) Register(r chi.Router) {
 	r.Get("/payments/config", h.paymentConfig)
-	r.Post("/checkout", h.createCheckout)
-	r.Post("/payments/process", h.processPayment)
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.RateLimit(10, 1*time.Minute))
+		r.Post("/checkout", h.createCheckout)
+		r.Post("/payments/process", h.processPayment)
+	})
 	r.Post("/webhooks/square", h.squareWebhook)
 }
 
