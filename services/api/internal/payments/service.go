@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"strconv"
 	"time"
 
@@ -128,10 +129,12 @@ func (s *service) ProcessPayment(ctx context.Context, req ProcessPaymentRequest)
 		ReferenceID: square.String(order.ID.String()),
 	})
 	if err != nil {
+		slog.Error("square payment failed", "order_id", order.ID, "error", err)
 		return nil, fmt.Errorf("payment failed: %w", err)
 	}
 
 	if resp.Payment == nil || resp.Payment.ID == nil {
+		slog.Error("square returned empty payment", "order_id", order.ID)
 		return nil, fmt.Errorf("square returned empty payment")
 	}
 
@@ -142,6 +145,8 @@ func (s *service) ProcessPayment(ctx context.Context, req ProcessPaymentRequest)
 		}
 		status = "paid"
 	}
+
+	slog.Info("payment processed", "order_id", order.ID, "payment_id", *resp.Payment.ID, "status", status, "amount_cents", order.TotalCents)
 
 	return &PaymentResult{
 		OrderID:   order.ID,
@@ -168,6 +173,8 @@ func (s *service) HandleWebhook(ctx context.Context, payload []byte, signatureHe
 	if err := json.Unmarshal(payload, &event); err != nil {
 		return fmt.Errorf("failed to parse webhook event: %w", err)
 	}
+
+	slog.Info("webhook received", "type", event.Type)
 
 	if event.Type != "payment.updated" {
 		return nil
@@ -212,5 +219,6 @@ func (s *service) HandleWebhook(ctx context.Context, payload []byte, signatureHe
 		return fmt.Errorf("invalid reference_id in square order: %w", err)
 	}
 
+	slog.Info("webhook marking order paid", "order_id", orderID)
 	return s.orders.MarkPaid(ctx, orderID)
 }
