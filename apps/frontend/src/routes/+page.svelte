@@ -18,6 +18,12 @@
 
 <svelte:head>
     <title>retrosnack clothing — thrift finds, loved again</title>
+    <meta property="og:title" content="retrosnack clothing — thrift finds, loved again" />
+    <meta
+        property="og:description"
+        content="Curated secondhand women's clothing, accessories, and shoes."
+    />
+    <meta property="og:type" content="website" />
 </svelte:head>
 
 <HeroSection />

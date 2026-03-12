@@ -68,6 +68,17 @@
 
 <svelte:head>
     <title>{product ? product.title : 'not found'} — retrosnack clothing</title>
+    {#if product}
+        <meta property="og:title" content="{product.title} — retrosnack clothing" />
+        <meta
+            property="og:description"
+            content="{product.brand} · ${(product.price_cents / 100).toFixed(2)} CAD"
+        />
+        <meta property="og:type" content="product" />
+        {#if product.images[0]?.url}
+            <meta property="og:image" content={product.images[0].url} />
+        {/if}
+    {/if}
 </svelte:head>
 
 {#if loading}

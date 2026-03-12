@@ -1,5 +1,11 @@
 <svelte:head>
     <title>about — retrosnack clothing</title>
+    <meta property="og:title" content="about — retrosnack clothing" />
+    <meta
+        property="og:description"
+        content="A small Canadian thrift shop giving secondhand clothing a new life."
+    />
+    <meta property="og:type" content="website" />
 </svelte:head>
 
 <section class="mx-auto max-w-2xl px-4 py-16 md:py-24">

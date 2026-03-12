@@ -59,6 +59,12 @@
 
 <svelte:head>
     <title>shop — retrosnack clothing</title>
+    <meta property="og:title" content="shop — retrosnack clothing" />
+    <meta
+        property="og:description"
+        content="Browse curated secondhand clothing, accessories, and shoes."
+    />
+    <meta property="og:type" content="website" />
 </svelte:head>
 
 <section class="mx-auto max-w-6xl px-4 py-12">
