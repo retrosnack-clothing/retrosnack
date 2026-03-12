@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/google/uuid"
 	square "github.com/square/square-go-sdk"
@@ -66,7 +67,10 @@ func (s *service) CreateCheckout(ctx context.Context, req CreateCheckoutRequest,
 
 	idempotencyKey := order.ID.String()
 
-	resp, err := s.square.Checkout.PaymentLinks.Create(ctx, &checkout.CreatePaymentLinkRequest{
+	sqCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	resp, err := s.square.Checkout.PaymentLinks.Create(sqCtx, &checkout.CreatePaymentLinkRequest{
 		IdempotencyKey: &idempotencyKey,
 		Order: &square.Order{
 			LocationID:  s.locationID,
@@ -110,7 +114,10 @@ func (s *service) ProcessPayment(ctx context.Context, req ProcessPaymentRequest)
 
 	idempotencyKey := uuid.New().String()
 
-	resp, err := s.square.Payments.Create(ctx, &square.CreatePaymentRequest{
+	payCtx, payCancel := context.WithTimeout(ctx, 10*time.Second)
+	defer payCancel()
+
+	resp, err := s.square.Payments.Create(payCtx, &square.CreatePaymentRequest{
 		SourceID:       req.SourceID,
 		IdempotencyKey: idempotencyKey,
 		AmountMoney: &square.Money{
@@ -188,7 +195,10 @@ func (s *service) HandleWebhook(ctx context.Context, payload []byte, signatureHe
 	}
 
 	// look up the square order to get our reference_id (our order UUID)
-	squareOrder, err := s.square.Orders.Get(ctx, &square.GetOrdersRequest{OrderID: squareOrderID})
+	whCtx, whCancel := context.WithTimeout(ctx, 10*time.Second)
+	defer whCancel()
+
+	squareOrder, err := s.square.Orders.Get(whCtx, &square.GetOrdersRequest{OrderID: squareOrderID})
 	if err != nil {
 		return fmt.Errorf("failed to get square order: %w", err)
 	}
