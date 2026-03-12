@@ -237,6 +237,9 @@
                                     <img
                                         src={item.image}
                                         alt={item.title}
+                                        loading="lazy"
+                                        width="56"
+                                        height="72"
                                         class="w-14 h-18 object-cover rounded bg-sand-dark"
                                     />
                                 {:else}

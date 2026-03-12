@@ -17,6 +17,9 @@
             <img
                 src={image}
                 alt={product.title}
+                loading="lazy"
+                width="300"
+                height="400"
                 class="h-full w-full object-cover transition-transform duration-300 {sold
                     ? ''
                     : 'group-hover:scale-105'}"

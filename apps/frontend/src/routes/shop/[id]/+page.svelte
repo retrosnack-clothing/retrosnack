@@ -87,7 +87,13 @@
         <div class="grid md:grid-cols-2 gap-8 md:gap-12">
             <div class="aspect-[3/4] overflow-hidden rounded-lg bg-sand-dark">
                 {#if image}
-                    <img src={image} alt={product.title} class="h-full w-full object-cover" />
+                    <img
+                        src={image}
+                        alt={product.title}
+                        width="600"
+                        height="800"
+                        class="h-full w-full object-cover"
+                    />
                 {/if}
             </div>
 

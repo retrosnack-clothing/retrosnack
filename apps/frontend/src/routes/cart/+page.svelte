@@ -27,6 +27,9 @@
                         <img
                             src={item.image}
                             alt={item.title}
+                            loading="lazy"
+                            width="96"
+                            height="128"
                             class="w-24 h-32 object-cover rounded-lg bg-sand-dark"
                         />
                     </a>
