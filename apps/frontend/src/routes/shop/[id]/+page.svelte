@@ -114,12 +114,26 @@
                     <h1 class="text-2xl md:text-3xl font-semibold">{product.title}</h1>
                 </div>
 
-                <div class="flex items-center gap-3 text-sm text-ink-muted">
-                    <span class="bg-tag px-3 py-1 rounded-full">{product.condition}</span>
+                <div class="flex items-center gap-2 text-sm">
+                    {#if product.condition === 'new'}
+                        <span class="bg-accent text-sand px-3 py-1 rounded-full font-medium">new</span>
+                    {/if}
+                    {#if product.drop}
+                        <a
+                            href="/drops/{product.drop.slug}"
+                            class="bg-ink/80 text-sand px-3 py-1 rounded-full font-medium hover:bg-ink transition-colors"
+                        >
+                            {product.drop.name}
+                        </a>
+                    {/if}
                 </div>
 
                 {#if product.description}
                     <p class="text-sm text-ink-muted leading-relaxed">{product.description}</p>
+                {/if}
+
+                {#if product.notes}
+                    <p class="text-sm text-ink-muted italic">{product.notes}</p>
                 {/if}
 
                 <p class="text-3xl font-semibold">
@@ -211,9 +225,9 @@
                         href="https://instagram.com/retrosnack.shop"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="border border-border px-6 py-3 rounded-full text-sm font-medium text-center hover:bg-sand-dark transition-colors"
+                        class="bg-accent text-sand px-6 py-3 rounded-full text-sm font-medium text-center hover:bg-accent-hover transition-colors"
                     >
-                        message on instagram
+                        DM on instagram to purchase
                     </a>
                 </div>
             </div>
