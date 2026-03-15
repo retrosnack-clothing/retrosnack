@@ -204,6 +204,14 @@ erDiagram
         string slug UK
         uuid parent_id FK
     }
+    drops {
+        uuid id PK
+        string name
+        string slug UK
+        text description
+        string instagram_url
+        timestamptz released_at
+    }
     products {
         uuid id PK
         string title
@@ -214,6 +222,8 @@ erDiagram
         int price_cents
         uuid seller_id FK
         string instagram_post_url
+        uuid drop_id FK
+        string notes
     }
     variants {
         uuid id PK
@@ -258,6 +268,7 @@ erDiagram
     users ||--o{ products : sells
     users ||--o{ orders : places
     categories ||--o{ products : contains
+    drops ||--o{ products : groups
     products ||--o{ variants : has
     products ||--o{ product_images : has
     products ||--|| instagram_links : links
