@@ -5,7 +5,6 @@
     import ProductGrid from '$lib/components/ProductGrid.svelte';
     import InstagramCTA from '$lib/components/InstagramCTA.svelte';
     import FadeIn from '$lib/components/FadeIn.svelte';
-    import Marquee from '$lib/components/Marquee.svelte';
     import { api } from '$lib/api';
     import type { Product, Drop } from '$lib/api';
 
@@ -37,8 +36,6 @@
 </svelte:head>
 
 <HeroSection />
-
-<Marquee items={['DM to purchase', 'new drops weekly', 'curated with care', 'secondhand style', 'shipped from canada']} />
 
 <FadeIn>
     <section class="mx-auto max-w-6xl px-4 py-16">
