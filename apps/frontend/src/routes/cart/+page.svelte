@@ -15,17 +15,14 @@
             <FlowerDoodle size={48} class="text-ink/15 mx-auto mb-6" />
             <p class="text-lg font-medium mb-2">your bag is empty</p>
             <p class="text-ink-muted mb-8 text-sm">time to find your next favourite piece.</p>
-            <a
-                href="/shop"
-                class="press inline-block bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium hover:bg-ink/85 transition-colors"
-            >
+            <a href="/shop" class="btn-primary inline-block px-6 py-3">
                 browse the rack
             </a>
         </div>
     {:else}
-        <div class="space-y-6">
+        <div class="space-y-4">
             {#each cart.items as item (item.variantId)}
-                <div class="flex gap-4 pb-6 border-b border-border">
+                <div class="flex gap-4 p-4 rounded-xl bg-sand-light" style="box-shadow: var(--shadow-soft)">
                     <a href="/shop/{item.productId}" class="shrink-0">
                         <img
                             src={item.image}
@@ -41,7 +38,7 @@
                         <div>
                             <a
                                 href="/shop/{item.productId}"
-                                class="font-medium hover:text-accent transition-colors"
+                                class="font-medium hover:text-ink/70 transition-colors"
                             >
                                 {item.title}
                             </a>
@@ -55,7 +52,7 @@
 
                     <button
                         onclick={() => cart.remove(item.variantId)}
-                        class="self-start text-ink-muted hover:text-accent transition-colors"
+                        class="self-start text-ink-muted hover:text-ink transition-colors"
                         aria-label="remove item"
                     >
                         <svg
@@ -81,10 +78,7 @@
                 <span class="text-2xl font-semibold">${(cart.totalCents / 100).toFixed(2)}</span>
             </div>
 
-            <a
-                href="/checkout"
-                class="press block w-full bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium text-center hover:bg-ink/85 transition-colors"
-            >
+            <a href="/checkout" class="btn-primary block w-full px-6 py-3 text-center">
                 proceed to checkout
             </a>
         </div>

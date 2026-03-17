@@ -111,7 +111,8 @@
                     type="text"
                     placeholder="search by name or brand..."
                     bind:value={search}
-                    class="w-full bg-sand-light border border-border rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20"
+                    class="w-full bg-sand-light border border-border rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink/30"
+                    style="box-shadow: var(--shadow-soft); transition: box-shadow 0.15s"
                 />
             </div>
 
@@ -144,6 +145,7 @@
                 <select
                     bind:value={sort}
                     class="ml-auto bg-sand-light border border-border rounded-full px-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20 cursor-pointer"
+                    style="box-shadow: var(--shadow-soft)"
                 >
                     <option value="newest">newest</option>
                     <option value="price-asc">price: low to high</option>

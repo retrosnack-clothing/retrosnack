@@ -24,7 +24,7 @@
 
         <a
             href="/shop"
-            class="animate-fade-in-up press mt-8 inline-block bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium hover:bg-ink/85 transition-colors"
+            class="animate-fade-in-up btn-primary mt-8 inline-block px-8 py-3.5"
             style="--stagger: 240ms"
         >
             browse the rack

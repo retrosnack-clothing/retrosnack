@@ -205,16 +205,15 @@
                 </div>
 
                 {#if error}
-                    <p class="text-accent text-sm">{error}</p>
+                    <p class="text-red-600 text-sm">{error}</p>
                 {/if}
 
                 <button
                     type="submit"
                     disabled={submitting || !cardReady}
-                    class="w-full bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium transition-colors {submitting ||
-                    !cardReady
-                        ? 'opacity-60 cursor-not-allowed'
-                        : 'hover:bg-ink/85'}"
+                    class="w-full px-6 py-3 {submitting || !cardReady
+                        ? 'bg-ink/30 text-sand rounded-full text-sm font-medium cursor-not-allowed'
+                        : 'btn-primary'}"
                 >
                     {#if submitting}
                         processing...

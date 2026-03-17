@@ -16,7 +16,7 @@
     });
 </script>
 
-<nav class="sticky top-0 z-50 bg-sand/90 backdrop-blur-sm border-b border-border">
+<nav class="sticky top-0 z-50 bg-sand/90 backdrop-blur-sm" style="box-shadow: 0 1px 0 var(--color-border), 0 4px 12px rgb(0 0 0 / 0.03)">
     <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
         <a href="/" class="text-xl font-semibold text-ink tracking-tight"> retrosnack clothing </a>
 

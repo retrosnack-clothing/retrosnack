@@ -2,60 +2,47 @@
     import FlowerDoodle from './FlowerDoodle.svelte';
 </script>
 
-<footer class="border-t border-border mt-auto">
-    <div class="mx-auto max-w-6xl px-4 py-12">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
-            <div class="col-span-2 md:col-span-1">
-                <p class="font-semibold text-lg mb-3">retrosnack</p>
-                <p class="text-sm text-ink-muted leading-relaxed">
-                    curated secondhand finds, loved again.
+<footer class="bg-ink text-sand mt-auto" style="box-shadow: 0 -4px 20px rgb(0 0 0 / 0.08)">
+    <div class="mx-auto max-w-6xl px-4 py-14">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+            <div>
+                <p class="font-semibold text-lg mb-2">retrosnack clothing</p>
+                <p class="text-sm text-sand/50 leading-relaxed max-w-xs">
+                    curated secondhand finds, loved again. based in canada.
                 </p>
-                <FlowerDoodle size={24} class="text-ink/20 mt-4" />
+                <FlowerDoodle size={20} class="text-sand/15 mt-4" />
             </div>
 
             <div>
-                <p class="text-xs uppercase tracking-widest text-ink-muted mb-4">shop</p>
-                <nav class="flex flex-col gap-2.5">
-                    <a href="/shop" class="text-sm text-ink-muted hover:text-ink transition-colors">the rack</a>
-                    <a href="/drops" class="text-sm text-ink-muted hover:text-ink transition-colors">drops</a>
-                    <a href="/cart" class="text-sm text-ink-muted hover:text-ink transition-colors">your bag</a>
+                <p class="text-xs uppercase tracking-widest text-sand/40 mb-4">explore</p>
+                <nav class="flex flex-col gap-2">
+                    <a href="/shop" class="text-sm text-sand/70 hover:text-sand transition-colors w-fit">the rack</a>
+                    <a href="/drops" class="text-sm text-sand/70 hover:text-sand transition-colors w-fit">drops</a>
+                    <a href="/about" class="text-sm text-sand/70 hover:text-sand transition-colors w-fit">about</a>
+                    <a href="/cart" class="text-sm text-sand/70 hover:text-sand transition-colors w-fit">your bag</a>
                 </nav>
             </div>
 
             <div>
-                <p class="text-xs uppercase tracking-widest text-ink-muted mb-4">info</p>
-                <nav class="flex flex-col gap-2.5">
-                    <a href="/about" class="text-sm text-ink-muted hover:text-ink transition-colors">about</a>
-                    <a
-                        href="https://instagram.com/retrosnack.shop"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-sm text-ink-muted hover:text-ink transition-colors"
-                    >
-                        instagram
-                    </a>
-                </nav>
-            </div>
-
-            <div>
-                <p class="text-xs uppercase tracking-widest text-ink-muted mb-4">follow</p>
+                <p class="text-xs uppercase tracking-widest text-sand/40 mb-4">follow the fits</p>
                 <a
                     href="https://instagram.com/retrosnack.shop"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
+                    class="inline-flex items-center gap-2.5 text-sand/70 hover:text-sand transition-colors"
                 >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="5" />
                         <circle cx="12" cy="12" r="5" />
                         <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
                     </svg>
-                    @retrosnack.shop
+                    <span class="text-sm font-medium">@retrosnack.shop</span>
                 </a>
+                <p class="text-xs text-sand/30 mt-3">DM us to purchase or ask questions</p>
             </div>
         </div>
 
-        <div class="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-muted">
+        <div class="border-t border-sand/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-sand/30">
             <p>&copy; {new Date().getFullYear()} retrosnack clothing</p>
             <p>proudly canadian</p>
         </div>

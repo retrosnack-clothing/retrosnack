@@ -135,7 +135,7 @@
 
                 <div class="flex items-center gap-2 text-sm">
                     {#if product.condition === 'new'}
-                        <span class="bg-accent text-sand px-3 py-1 rounded-full font-medium">new</span>
+                        <span class="bg-ink text-sand px-3 py-1 rounded-full font-medium">new</span>
                     {/if}
                     {#if product.drop}
                         <a
@@ -164,10 +164,11 @@
                         {#each variants as variant (variant.id)}
                             <button
                                 onclick={() => (selectedVariant = variant)}
-                                class="px-4 py-2 rounded-full text-sm border transition-colors {selectedVariant?.id ===
+                                class="px-4 py-2 rounded-full text-sm border transition-all duration-150 {selectedVariant?.id ===
                                 variant.id
-                                    ? 'border-ink bg-ink text-sand'
-                                    : 'border-border hover:border-ink'}"
+                                    ? 'border-ink bg-ink text-sand shadow-sm'
+                                    : 'border-border hover:border-ink bg-sand-light'}"
+                                style="box-shadow: {selectedVariant?.id === variant.id ? '' : 'var(--shadow-soft)'}"
                             >
                                 {variant.size}{variant.color ? ` / ${variant.color}` : ''}
                             </button>
@@ -185,56 +186,44 @@
                     {#if variants.length === 0}
                         <button
                             disabled
-                            class="bg-ink/40 text-sand px-6 py-3 rounded-full text-sm font-medium cursor-not-allowed"
+                            class="bg-ink/30 text-sand px-6 py-3 rounded-full text-sm font-medium cursor-not-allowed"
                         >
                             sold
                         </button>
                     {:else if justAdded}
                         <div
-                            class="bg-sand-light border border-border rounded-lg p-4 text-center space-y-3"
+                            class="card p-4 text-center space-y-3"
                         >
                             <p class="text-sm font-medium">added to your bag</p>
                             <div class="flex gap-3">
-                                <a
-                                    href="/shop"
-                                    class="flex-1 border border-border px-4 py-2.5 rounded-full text-sm font-medium text-center hover:bg-sand-dark transition-colors"
-                                >
+                                <a href="/shop" class="btn-outline flex-1 px-4 py-2.5 text-center">
                                     keep shopping
                                 </a>
-                                <a
-                                    href="/cart"
-                                    class="flex-1 bg-ink text-sand px-4 py-2.5 rounded-full text-sm font-medium text-center hover:bg-ink/85 transition-colors"
-                                >
+                                <a href="/cart" class="btn-primary flex-1 px-4 py-2.5 text-center">
                                     view bag ({cart.count})
                                 </a>
                             </div>
                         </div>
                     {:else if inCart}
                         <div class="flex gap-3">
-                            <a
-                                href="/shop"
-                                class="flex-1 border border-border px-4 py-2.5 rounded-full text-sm font-medium text-center hover:bg-sand-dark transition-colors"
-                            >
+                            <a href="/shop" class="btn-outline flex-1 px-4 py-2.5 text-center">
                                 keep shopping
                             </a>
-                            <a
-                                href="/cart"
-                                class="flex-1 bg-ink text-sand px-4 py-2.5 rounded-full text-sm font-medium text-center hover:bg-ink/85 transition-colors"
-                            >
+                            <a href="/cart" class="btn-primary flex-1 px-4 py-2.5 text-center">
                                 view bag ({cart.count})
                             </a>
                         </div>
                     {:else if !selectedVariant}
                         <button
                             disabled
-                            class="bg-ink/40 text-sand px-6 py-3 rounded-full text-sm font-medium cursor-not-allowed"
+                            class="bg-ink/30 text-sand px-6 py-3 rounded-full text-sm font-medium cursor-not-allowed"
                         >
                             select a size
                         </button>
                     {:else}
                         <button
                             onclick={addToCart}
-                            class="press bg-ink text-sand px-6 py-3 rounded-full text-sm font-medium hover:bg-ink/85 transition-colors"
+                            class="btn-primary px-6 py-3 w-full"
                         >
                             add to bag
                         </button>
@@ -244,7 +233,7 @@
                         href="https://instagram.com/retrosnack.shop"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="press bg-accent text-sand px-6 py-3 rounded-full text-sm font-medium text-center hover:bg-accent-hover transition-colors"
+                        class="btn-outline px-6 py-3 text-center w-full"
                     >
                         DM on instagram to purchase
                     </a>

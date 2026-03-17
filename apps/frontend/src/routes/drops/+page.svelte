@@ -33,11 +33,12 @@
     {#if loading}
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {#each Array(3) as _}
-                <div class="border border-border rounded-lg p-6 space-y-3">
-                    <Skeleton class="h-5 w-1/2" />
+                <div class="bg-sand-light rounded-xl p-6 space-y-3">
+                    <Skeleton class="h-3 w-16" />
+                    <Skeleton class="h-6 w-1/2" />
                     <Skeleton class="h-3.5 w-full" />
                     <Skeleton class="h-3.5 w-2/3" />
-                    <Skeleton class="h-3.5 w-1/4 mt-2" />
+                    <Skeleton class="h-3.5 w-1/4 mt-1" />
                 </div>
             {/each}
         </div>
@@ -50,16 +51,17 @@
             {#each drops as drop (drop.id)}
                 <a
                     href="/drops/{drop.slug}"
-                    class="group block border border-border rounded-lg p-6 hover:border-ink hover-lift"
+                    class="group block hover-lift rounded-xl bg-sand-light p-6"
                 >
-                    <h2 class="text-lg font-semibold group-hover:text-accent transition-colors">
+                    <p class="text-xs uppercase tracking-widest text-ink-muted mb-2">collection</p>
+                    <h2 class="text-xl font-semibold group-hover:text-accent transition-colors">
                         {drop.name}
                     </h2>
                     {#if drop.description}
-                        <p class="text-sm text-ink-muted mt-2 line-clamp-2">{drop.description}</p>
+                        <p class="text-sm text-ink-muted mt-2.5 line-clamp-2 leading-relaxed">{drop.description}</p>
                     {/if}
-                    <span class="text-sm text-accent mt-3 inline-block">
-                        view drop &rarr;
+                    <span class="text-sm text-accent font-medium mt-4 inline-flex items-center gap-1">
+                        shop drop <span class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
                     </span>
                 </a>
             {/each}
