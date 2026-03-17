@@ -16,7 +16,10 @@
     });
 </script>
 
-<nav class="sticky top-0 z-50 bg-sand/90 backdrop-blur-sm" style="box-shadow: 0 1px 0 var(--color-border), 0 4px 12px rgb(0 0 0 / 0.03)">
+<nav
+    class="sticky top-0 z-[60] bg-sand/90 backdrop-blur-sm"
+    style="box-shadow: {mobileOpen ? 'none' : '0 1px 0 var(--color-border), 0 4px 12px rgb(0 0 0 / 0.03)'}"
+>
     <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
         <a href="/" class="text-xl font-semibold text-ink tracking-tight"> retrosnack clothing </a>
 
@@ -68,10 +71,10 @@
             </a>
         </div>
 
-        <div class="flex items-center gap-4 sm:hidden">
+        <div class="flex items-center gap-2 sm:hidden">
             <a
                 href="/cart"
-                class="relative text-ink-muted hover:text-ink transition-colors"
+                class="relative text-ink-muted hover:text-ink transition-colors p-2"
                 aria-label="cart"
             >
                 <svg
@@ -99,8 +102,9 @@
 
             <button
                 onclick={() => (mobileOpen = !mobileOpen)}
-                class="text-ink p-1"
-                aria-label="menu"
+                class="text-ink -mr-2 p-2"
+                aria-label={mobileOpen ? 'close menu' : 'open menu'}
+                aria-expanded={mobileOpen}
             >
                 <svg
                     width="22"
@@ -124,22 +128,48 @@
         </div>
     </div>
 
-    {#if mobileOpen}
-        <div class="sm:hidden border-t border-border bg-sand/95 backdrop-blur-sm animate-fade-in-up" style="--stagger: 0ms">
-            <div class="flex flex-col px-4 py-4 gap-1">
-                {#each links as link, i}
-                    <a
-                        href={link.href}
-                        class="py-3 text-base font-medium transition-colors border-b border-border/50 {page.url.pathname.startsWith(
-                            link.href,
-                        )
-                            ? 'text-ink'
-                            : 'text-ink-muted'}"
-                    >
-                        {link.label}
-                    </a>
-                {/each}
-            </div>
-        </div>
-    {/if}
 </nav>
+
+{#if mobileOpen}
+    <button
+        class="fixed inset-0 z-40 bg-ink/20 backdrop-blur-[2px] sm:hidden"
+        aria-label="close menu"
+        onclick={() => (mobileOpen = false)}
+        tabindex="-1"
+    ></button>
+
+    <div
+        class="fixed top-[49px] right-0 z-50 w-52 bg-sand border-l border-border sm:hidden mobile-menu-enter"
+        style="height: calc(100dvh - 49px); box-shadow: -4px 0 20px rgb(0 0 0 / 0.06)"
+    >
+        <div class="flex flex-col px-5 pt-5 gap-1">
+            {#each links as link}
+                <a
+                    href={link.href}
+                    class="py-3 text-base font-medium transition-colors {page.url.pathname.startsWith(
+                        link.href,
+                    )
+                        ? 'text-ink'
+                        : 'text-ink-muted'}"
+                >
+                    {link.label}
+                </a>
+            {/each}
+        </div>
+    </div>
+{/if}
+
+<style>
+    @keyframes slide-in-right {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    .mobile-menu-enter {
+        animation: slide-in-right 0.25s ease-out;
+    }
+</style>
