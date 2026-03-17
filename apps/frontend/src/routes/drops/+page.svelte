@@ -58,10 +58,16 @@
                         {drop.name}
                     </h2>
                     {#if drop.description}
-                        <p class="text-sm text-ink-muted mt-2.5 line-clamp-2 leading-relaxed">{drop.description}</p>
+                        <p class="text-sm text-ink-muted mt-2.5 line-clamp-2 leading-relaxed">
+                            {drop.description}
+                        </p>
                     {/if}
-                    <span class="text-sm text-accent font-medium mt-4 inline-flex items-center gap-1">
-                        shop drop <span class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
+                    <span
+                        class="text-sm text-accent font-medium mt-4 inline-flex items-center gap-1"
+                    >
+                        shop drop <span class="transition-transform group-hover:translate-x-0.5"
+                            >&rarr;</span
+                        >
                     </span>
                 </a>
             {/each}

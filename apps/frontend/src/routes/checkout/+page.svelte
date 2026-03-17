@@ -109,9 +109,7 @@
     {#if cart.items.length === 0}
         <div class="text-center py-16">
             <p class="text-ink-muted mb-6">your bag is empty.</p>
-            <a href="/shop" class="btn-primary inline-block px-6 py-3">
-                browse the rack
-            </a>
+            <a href="/shop" class="btn-primary inline-block px-6 py-3"> browse the rack </a>
         </div>
     {:else}
         <div class="grid md:grid-cols-5 gap-10">

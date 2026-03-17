@@ -18,7 +18,9 @@
 
 <nav
     class="sticky top-0 z-[60] bg-sand/90 backdrop-blur-sm"
-    style="box-shadow: {mobileOpen ? 'none' : '0 1px 0 var(--color-border), 0 4px 12px rgb(0 0 0 / 0.03)'}"
+    style="box-shadow: {mobileOpen
+        ? 'none'
+        : '0 1px 0 var(--color-border), 0 4px 12px rgb(0 0 0 / 0.03)'}"
 >
     <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
         <a href="/" class="text-xl font-semibold text-ink tracking-tight"> retrosnack clothing </a>
@@ -27,7 +29,9 @@
             {#each links as link}
                 <a
                     href={link.href}
-                    class="group relative text-sm transition-colors py-1 {page.url.pathname.startsWith(link.href)
+                    class="group relative text-sm transition-colors py-1 {page.url.pathname.startsWith(
+                        link.href,
+                    )
                         ? 'text-ink font-medium'
                         : 'text-ink-muted hover:text-ink'}"
                 >
@@ -129,7 +133,6 @@
             </button>
         </div>
     </div>
-
 </nav>
 
 {#if mobileOpen}

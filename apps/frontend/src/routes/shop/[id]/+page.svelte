@@ -122,7 +122,9 @@
                         width="600"
                         height="800"
                         onload={() => (imageLoaded = true)}
-                        class="h-full w-full object-cover transition-opacity duration-500 {imageLoaded ? 'opacity-100' : 'opacity-0'}"
+                        class="h-full w-full object-cover transition-opacity duration-500 {imageLoaded
+                            ? 'opacity-100'
+                            : 'opacity-0'}"
                     />
                 {/if}
             </div>
@@ -168,7 +170,9 @@
                                 variant.id
                                     ? 'border-ink bg-ink text-sand shadow-sm'
                                     : 'border-border hover:border-ink bg-sand-light'}"
-                                style="box-shadow: {selectedVariant?.id === variant.id ? '' : 'var(--shadow-soft)'}"
+                                style="box-shadow: {selectedVariant?.id === variant.id
+                                    ? ''
+                                    : 'var(--shadow-soft)'}"
                             >
                                 {variant.size}{variant.color ? ` / ${variant.color}` : ''}
                             </button>
@@ -191,9 +195,7 @@
                             sold
                         </button>
                     {:else if justAdded}
-                        <div
-                            class="card p-4 text-center space-y-3"
-                        >
+                        <div class="card p-4 text-center space-y-3">
                             <p class="text-sm font-medium">added to your bag</p>
                             <div class="flex gap-3">
                                 <a href="/shop" class="btn-outline flex-1 px-4 py-2.5 text-center">
@@ -221,10 +223,7 @@
                             select a size
                         </button>
                     {:else}
-                        <button
-                            onclick={addToCart}
-                            class="btn-primary px-6 py-3 w-full"
-                        >
+                        <button onclick={addToCart} class="btn-primary px-6 py-3 w-full">
                             add to bag
                         </button>
                     {/if}

@@ -16,9 +16,7 @@
     </p>
 
     <div class="flex flex-col gap-3">
-        <a href="/shop" class="btn-primary px-6 py-3 text-center">
-            keep browsing
-        </a>
+        <a href="/shop" class="btn-primary px-6 py-3 text-center"> keep browsing </a>
         <a
             href="https://instagram.com/retrosnack.shop"
             target="_blank"

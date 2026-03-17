@@ -64,23 +64,34 @@
 
 {#if latestDrop}
     <FadeIn>
-        <section class="bg-sand-light" style="box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border)">
+        <section
+            class="bg-sand-light"
+            style="box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border)"
+        >
             <a
                 href="/drops/{latestDrop.slug}"
                 class="group block mx-auto max-w-6xl px-4 py-16 md:py-24 text-center relative overflow-hidden"
             >
-                <FlowerDoodle size={100} class="absolute -right-6 -top-6 text-ink/[0.03] rotate-12 hidden md:block" />
-                <FlowerDoodle size={70} class="absolute -left-4 -bottom-4 text-ink/[0.03] -rotate-12 hidden md:block" />
-                <p class="text-xs uppercase tracking-widest text-ink-muted mb-4 relative">latest collection</p>
+                <FlowerDoodle
+                    size={100}
+                    class="absolute -right-6 -top-6 text-ink/[0.03] rotate-12 hidden md:block"
+                />
+                <FlowerDoodle
+                    size={70}
+                    class="absolute -left-4 -bottom-4 text-ink/[0.03] -rotate-12 hidden md:block"
+                />
+                <p class="text-xs uppercase tracking-widest text-ink-muted mb-4 relative">
+                    latest collection
+                </p>
                 <h2 class="text-3xl md:text-5xl font-semibold relative">
                     {latestDrop.name}
                 </h2>
                 {#if latestDrop.description}
-                    <p class="text-ink-muted mt-4 max-w-md mx-auto relative">{latestDrop.description}</p>
+                    <p class="text-ink-muted mt-4 max-w-md mx-auto relative">
+                        {latestDrop.description}
+                    </p>
                 {/if}
-                <span
-                    class="btn-primary inline-block mt-6 px-6 py-3 relative"
-                >
+                <span class="btn-primary inline-block mt-6 px-6 py-3 relative">
                     shop the drop &rarr;
                 </span>
             </a>

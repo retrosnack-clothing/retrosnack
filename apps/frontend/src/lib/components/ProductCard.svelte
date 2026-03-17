@@ -15,7 +15,9 @@
 
 <a
     href="/shop/{product.id}"
-    class="group block hover-lift rounded-xl bg-sand-light overflow-hidden {sold ? 'opacity-60' : ''}"
+    class="group block hover-lift rounded-xl bg-sand-light overflow-hidden {sold
+        ? 'opacity-60'
+        : ''}"
 >
     <div class="relative aspect-[3/4] overflow-hidden bg-sand-dark">
         {#if image}
@@ -43,7 +45,9 @@
         {/if}
         <div class="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
             {#if product.condition === 'new'}
-                <span class="bg-ink text-sand text-xs font-medium px-2.5 py-1 rounded-full shadow-sm">
+                <span
+                    class="bg-ink text-sand text-xs font-medium px-2.5 py-1 rounded-full shadow-sm"
+                >
                     new
                 </span>
             {/if}

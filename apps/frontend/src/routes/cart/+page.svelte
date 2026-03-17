@@ -15,14 +15,15 @@
             <FlowerDoodle size={48} class="text-ink/15 mx-auto mb-6" />
             <p class="text-lg font-medium mb-2">your bag is empty</p>
             <p class="text-ink-muted mb-8 text-sm">time to find your next favourite piece.</p>
-            <a href="/shop" class="btn-primary inline-block px-6 py-3">
-                browse the rack
-            </a>
+            <a href="/shop" class="btn-primary inline-block px-6 py-3"> browse the rack </a>
         </div>
     {:else}
         <div class="space-y-4">
             {#each cart.items as item (item.variantId)}
-                <div class="flex gap-4 p-4 rounded-xl bg-sand-light" style="box-shadow: var(--shadow-soft)">
+                <div
+                    class="flex gap-4 p-4 rounded-xl bg-sand-light"
+                    style="box-shadow: var(--shadow-soft)"
+                >
                     <a href="/shop/{item.productId}" class="shrink-0">
                         <img
                             src={item.image}

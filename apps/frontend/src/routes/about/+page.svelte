@@ -9,7 +9,9 @@
 </svelte:head>
 
 <section class="mx-auto max-w-2xl px-4 py-16 md:py-24">
-    <h1 class="animate-fade-in-up text-2xl md:text-3xl font-semibold mb-8">about retrosnack clothing</h1>
+    <h1 class="animate-fade-in-up text-2xl md:text-3xl font-semibold mb-8">
+        about retrosnack clothing
+    </h1>
 
     <div class="space-y-5 text-ink-muted leading-relaxed">
         <p class="animate-fade-in-up" style="--stagger: 80ms">
@@ -28,7 +30,10 @@
         </p>
     </div>
 
-    <div class="animate-fade-in-up mt-12 pt-8 border-t border-border space-y-6" style="--stagger: 320ms">
+    <div
+        class="animate-fade-in-up mt-12 pt-8 border-t border-border space-y-6"
+        style="--stagger: 320ms"
+    >
         <div>
             <p class="text-sm text-ink-muted mb-2">curated and styled by</p>
             <a

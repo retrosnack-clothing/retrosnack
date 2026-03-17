@@ -5,7 +5,10 @@
 
 <section class="relative flex flex-col h-[calc(100dvh-49px)] w-full">
     <div class="flex-1 flex flex-col items-center justify-center text-center px-4">
-        <div class="animate-fade-in-up flex items-center gap-3 mb-4 text-ink/70" style="--stagger: 0ms">
+        <div
+            class="animate-fade-in-up flex items-center gap-3 mb-4 text-ink/70"
+            style="--stagger: 0ms"
+        >
             <FlowerDoodle size={28} />
             <FlowerDoodle size={24} />
             <FlowerDoodle size={28} />
@@ -18,7 +21,10 @@
             Retrosnack Clothing
         </h1>
 
-        <p class="animate-fade-in-up mt-4 text-lg md:text-xl text-ink-muted max-w-md" style="--stagger: 160ms">
+        <p
+            class="animate-fade-in-up mt-4 text-lg md:text-xl text-ink-muted max-w-md"
+            style="--stagger: 160ms"
+        >
             curated secondhand finds, loved again.
         </p>
 
@@ -30,7 +36,10 @@
             browse the rack
         </a>
 
-        <div class="animate-fade-in-up mt-16 grid grid-cols-3 gap-8 md:gap-16 text-center max-w-lg text-ink/60" style="--stagger: 350ms">
+        <div
+            class="animate-fade-in-up mt-16 grid grid-cols-3 gap-8 md:gap-16 text-center max-w-lg text-ink/60"
+            style="--stagger: 350ms"
+        >
             <div class="flex flex-col items-center gap-2">
                 <svg
                     width="28"
@@ -89,5 +98,13 @@
         </div>
     </div>
 
-    <Marquee items={['DM to purchase', 'new drops weekly', 'curated with care', 'secondhand style', 'shipped from canada']} />
+    <Marquee
+        items={[
+            'DM to purchase',
+            'new drops weekly',
+            'curated with care',
+            'secondhand style',
+            'shipped from canada',
+        ]}
+    />
 </section>
