@@ -155,9 +155,18 @@
         </div>
 
         {#if filtered.length === 0}
-            <p class="text-center text-ink-muted py-16">
-                no items match your search — try something else.
-            </p>
+            <div class="text-center py-16">
+                <p class="text-ink-muted mb-4">no items match your search.</p>
+                <button
+                    onclick={() => {
+                        search = '';
+                        activeCategory = 'all';
+                    }}
+                    class="btn-outline px-5 py-2.5"
+                >
+                    clear filters
+                </button>
+            </div>
         {:else}
             <ProductGrid>
                 {#each filtered as product (product.id)}
