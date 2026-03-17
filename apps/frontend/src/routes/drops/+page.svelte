@@ -18,8 +18,8 @@
 </script>
 
 <svelte:head>
-    <title>drops - retrosnack clothing</title>
-    <meta property="og:title" content="drops - retrosnack clothing" />
+    <title>drops — retrosnack clothing</title>
+    <meta property="og:title" content="drops — retrosnack clothing" />
     <meta property="og:description" content="Themed collections, released together." />
     <meta property="og:type" content="website" />
 </svelte:head>

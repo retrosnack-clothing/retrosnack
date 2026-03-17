@@ -34,9 +34,9 @@
 </script>
 
 <svelte:head>
-    <title>{drop ? drop.name : 'not found'} - retrosnack clothing</title>
+    <title>{drop ? drop.name : 'not found'} — retrosnack clothing</title>
     {#if drop}
-        <meta property="og:title" content="{drop.name} - retrosnack clothing" />
+        <meta property="og:title" content="{drop.name} — retrosnack clothing" />
         <meta property="og:description" content={drop.description || `Shop the ${drop.name} drop.`} />
         <meta property="og:type" content="website" />
     {/if}
